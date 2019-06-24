@@ -23,8 +23,9 @@ class Algorithm():
     
     
     # Initialized with the Timeserie
-    def __init__(self, timeseries): 
+    def __init__(self, timeseries, decay): 
         self.ts = timeseries
+        self.decay = decay
     
     
     # Training first 30 days
@@ -62,7 +63,8 @@ class Algorithm():
 
             TSLRE = i - self.rareEdgesTrack['positions'][-1] #Time Since Last Rare Edge
             lastRE = self.rareEdgesTrack['values'][-1]  #Last Rare Edge value
-             
+            dFactor = self.decay
+            
             # Reset Flags
             flag = False
             toReport = False
@@ -110,8 +112,8 @@ class Algorithm():
     
     
 # Run Algo    
-# algoInstance = Algorithm(time_series, 0.5) #Hyperparemeter 0-1
-algoInstance = Algorithm(time_series)
+algoInstance = Algorithm(time_series, 0.5) #Hyperparemeter 0-1
+# algoInstance = Algorithm(time_series)
 algoInstance.learnFirst30Days()
 rareEdgesTrack = algoInstance.rareEdge_detection()
 
