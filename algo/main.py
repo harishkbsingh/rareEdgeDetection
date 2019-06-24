@@ -55,13 +55,13 @@ class Algorithm():
         # Training & Detection
         for i in range(self.trainingTime, self.timeSerieHours):
 
-            # Only distance
-            if self.ts[i] == 0:
+            # Non-zeros
+            tick = self.ts[i]
+            if tick == 0:
                 continue
 
-            # Distance from last Rare Edge (TSLRE = Time Since Last Rare Edge)
-            TSLRE = i - self.rareEdgesTrack['positions'][-1]
-            lastRE = self.rareEdgesTrack['values'][-1] 
+            TSLRE = i - self.rareEdgesTrack['positions'][-1] #Time Since Last Rare Edge
+            lastRE = self.rareEdgesTrack['values'][-1]  #Last Rare Edge value
              
             # Reset Flags
             flag = False
@@ -69,46 +69,46 @@ class Algorithm():
             
         
             # Heuristics
-            if (TSLRE > self.timeLast60days and self.ts[i] > np.mean(self.rareEdgesTrack['values']) * 0.50) or \
-               (TSLRE > self.timeLast30days and TSLRE < self.timeLast60days and lastRE * 1.50 < self.ts[i]) or \
-               (TSLRE > self.timeLast15days and TSLRE < self.timeLast30days and lastRE * 2 < self.ts[i]) or \
-               (TSLRE > self.timeLast5days and TSLRE < self.timeLast15days and lastRE * 3 < self.ts[i]) or \
-               (TSLRE > self.timeLast1days and TSLRE < self.timeLast5days and lastRE * 5 < self.ts[i]):
-                self.rareEdgesTrack['values'].append(self.ts[i])
+            if (TSLRE > self.timeLast60days and tick > np.mean(self.rareEdgesTrack['values']) * 0.50) or \
+               (TSLRE > self.timeLast30days and TSLRE < self.timeLast60days and lastRE * 1.50 < tick) or \
+               (TSLRE > self.timeLast15days and TSLRE < self.timeLast30days and lastRE * 2 < tick) or \
+               (TSLRE > self.timeLast5days and TSLRE < self.timeLast15days and lastRE * 3 < tick) or \
+               (TSLRE > self.timeLast1days and TSLRE < self.timeLast5days and lastRE * 5 < tick):
+                self.rareEdgesTrack['values'].append(tick)
                 self.rareEdgesTrack['positions'].append(i)
                 toReport = True
-            elif self.ts[i] > lastRE:
-                self.rareEdgesTrack['values'].append(ts[i])
+            elif tick > lastRE:
+                self.rareEdgesTrack['values'].append(tick)
                 self.rareEdgesTrack['positions'].append(i)
         
             # More heuristics for false positives:
             if toReport:
                 
                 # Learning (24 hours after an rare edge, these are tracked but no re-reported)
-                if (TSLRE < self.timeLast1days and lastRE < self.ts[i]):
+                if (TSLRE < self.timeLast1days and lastRE < tick):
                     toReport = False
 
                 # Rare edges should be 3x greater than the mean of the spikes after the last rare edge was detected
-                if self.ts[i] < (np.mean([value for posValue, value in enumerate(self.trackAllSpikesValue) if self.trackAllSpikesPosition[posValue] < TSLRE])) * 3:
+                if tick < (np.mean([value for posValue, value in enumerate(self.trackAllSpikesValue) if self.trackAllSpikesPosition[posValue] < TSLRE])) * 3:
                     toReport = False
 
                 # Rare edges should be 1.5x greater than greatest spike after last last rare edge 
                 theValues = [self.trackAllSpikesValue[index] for index, position in enumerate(self.trackAllSpikesPosition) if position < TSLRE]
-                if len(theValues) > 0 and self.ts[i] < np.max(theValues) * 1.50:
+                if len(theValues) > 0 and tick < np.max(theValues) * 1.50:
                     toReport = False
                     
                 # Report here
                 self.rareEdgesTrack['reported'].append(toReport)
             
             # A spike is at least 75% of the last of rare edge
-            if self.ts[i] > lastRE * 0.75:
-                self.trackAllSpikesValue.append(self.ts[i])
+            if tick > lastRE * 0.75:
+                self.trackAllSpikesValue.append(tick)
                 self.trackAllSpikesPosition.append(i)
             
             
         return self.rareEdgesTrack   
-        
-        
+    
+    
 # Run Algo    
 # algoInstance = Algorithm(time_series, 0.5) #Hyperparemeter 0-1
 algoInstance = Algorithm(time_series)
