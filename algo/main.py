@@ -1,46 +1,5 @@
 class Algorithm():
     
-    # Constants 
-    trainingTime = 30 * 24
-    timeLast60days = 60 * 24
-    timeLast30days = 30 * 24
-    timeLast15days = 15 * 24
-    timeLast5days  = 5 * 24
-    timeLast1days  = 24
-    timeLast5hours = 5
-    
-    
-    # Results       
-    trackAllSpikesValue = []
-    trackAllSpikesPosition = []
-    rareEdgesTrack = {
-                        'positions': [], 
-                        'values': [], 
-                        'reported': []
-                    }
-    
-    
-    # Initialized with the Timeserie
-    def __init__(self, timeseries): 
-        self.ts = timeseries
-    
-    
-    # Training first 30 days
-    def learnFirst30Days(self):
-        
-        self.timeSerieHours = len(self.ts)
-        assert self.timeSerieHours > 30, "not enough data"
-        
-        self.rareEdgesTrack['positions'].append(self.trainingTime - 1)
-        self.rareEdgesTrack['values'].append(np.amax(self.ts[:self.trainingTime]))
-        self.rareEdgesTrack['reported'].append(False)
-        self.trackAllSpikesValue.append(np.amax(self.ts[:self.trainingTime]))
-        self.trackAllSpikesPosition.append(self.trainingTime - 1)
-        return
-        
-    
-class Algorithm():
-    
     
     
     # Constants 
