@@ -107,7 +107,8 @@ class Algorithm():
         
         
 # Run Algo    
-algoInstance = Algorithm(time_series, 0.5) #Hyperparemeter 0-1
+# algoInstance = Algorithm(time_series, 0.5) #Hyperparemeter 0-1
+algoInstance = Algorithm(time_series)
 algoInstance.learnFirst30Days()
 rareEdgesTrack = algoInstance.rareEdge_detection()
 
