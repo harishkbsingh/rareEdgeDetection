@@ -1,7 +1,5 @@
 class Algorithm():
     
-    
-    
     # Constants 
     trainingTime = 30 * 24
     timeLast60days = 60 * 24
@@ -10,7 +8,6 @@ class Algorithm():
     timeLast5days  = 5 * 24
     timeLast1days  = 24
     timeLast5hours = 5
-    
     
     # Results       
     trackAllSpikesValue = []
@@ -21,12 +18,10 @@ class Algorithm():
                         'reported': []
                     }
     
-    
     # Initialized with the Timeserie
     def __init__(self, timeseries, decay): 
         self.ts = timeseries
         self.decay = decay
-    
     
     # Training first 30 days
     def learnFirst30Days(self):
@@ -41,7 +36,6 @@ class Algorithm():
         self.trackAllSpikesPosition.append(self.trainingTime - 1)
         return
         
-    
     # Algorithm    
     def rareEdge_detection(self):
 
@@ -108,7 +102,7 @@ class Algorithm():
                 self.trackAllSpikesPosition.append(i)
             
             
-        return self.rareEdgesTrack   
+        return self.rareEdgesTrack    
     
     
 # Run Algo    
