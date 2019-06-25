@@ -51,7 +51,6 @@ class Algorithm():
 
             TSLRE = i - self.rareEdgesTrack['positions'][-1] #Time Since Last Rare Edge
             lastRE = self.rareEdgesTrack['values'][-1]  #Last Rare Edge value
-            dFactor = self.decay
             
             # Reset Flags
             flag = False
@@ -95,7 +94,7 @@ class Algorithm():
     
     
 # Run Algo    
-algoInstance = Algorithm(time_series) #No Hyperparemeter 0-1
+algoInstance = Algorithm(time_series) #Hyperparemeter 0-1
 algoInstance.learnFirst30Days()
 rareEdgesTrack = algoInstance.rareEdge_detection()
 
