@@ -13,9 +13,8 @@ class Algorithm():
                     }
     
     # Initialized with the Timeserie
-    def __init__(self, timeseries, decay): 
+    def __init__(self, timeseries): 
         self.ts = timeseries
-        self.decay = decay
     
     # Training first 30 days
     def learnFirst30Days(self):
@@ -28,10 +27,12 @@ class Algorithm():
         self._trackAllSpikesPosition.append(self.trainingTime - 1)
         return
     
-    # Polynomial regressions (polynomial least squares fittings).
+    # Polynomial regressions (polynomial least squares fittings). The factor to calculate the number of 
+    # times in terms of connection to classify an edge as rare is determined dynamically by using a 
+    # polynomial regression function computed using least square based on the existing date.
     def decayFunction(self, TSLRE):
-        return (-0.04448 * (TSLRE/24)) + 3.5 if TSLRE/24 < 60 else float('inf') # Generalize better than order 2
 #       return (0.0006430209079 * (TSLRE/24)**2) - (0.1041791699 *(TSLRE/24)) + 4.872672204 if TSLRE/24 < 60 else float('inf')
+        return (-0.04448 * (TSLRE/24)) + 3.5 if TSLRE/24 < 60 else 1 # Generalize better than order 2
      
     
     # Algorithm    
@@ -94,7 +95,7 @@ class Algorithm():
     
     
 # Run Algo    
-algoInstance = Algorithm(time_series, 0.5) #Hyperparemeter 0-1
+algoInstance = Algorithm(time_series) #No Hyperparemeter 0-1
 algoInstance.learnFirst30Days()
 rareEdgesTrack = algoInstance.rareEdge_detection()
 
