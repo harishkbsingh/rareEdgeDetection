@@ -29,7 +29,7 @@ class Algorithm():
     
     # Polynomial regressions (polynomial least squares fittings). The factor to calculate the number of 
     # times in terms of connection to classify an edge as rare is determined dynamically by using a 
-    # polynomial regression function computed using least square based on the existing data.
+    # polynomial regression function computed using least square based on the existing date.
     def decayFunction(self, TSLRE):
 #       return (0.0006430209079 * (TSLRE/24)**2) - (0.1041791699 *(TSLRE/24)) + 4.872672204 if TSLRE/24 < 60 else float('inf')
         return (-0.04448 * (TSLRE/24)) + 3.5 if TSLRE/24 < 60 else 1 # Generalize better than order 2
@@ -91,7 +91,6 @@ class Algorithm():
             
             
         return self.rareEdgesTrack   
-    
     
 # Run Algo    
 algoInstance = Algorithm(time_series) #Hyperparemeter 0-1
