@@ -1,0 +1,1 @@
+# Rare Edge Detection Algorithm
