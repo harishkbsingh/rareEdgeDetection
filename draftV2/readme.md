@@ -15,3 +15,8 @@
 #### Update this document.
 #### Complete documentation and TODO list bellow.
 #### Report results running algo in PREPROD_CDB_PREPROD_9593B140CA75F1259DD584236657F2A996A6FA2A14B603FF and PREPROD_CDB_SNOWFLAKE_E6FB97EF9C0EFB48D1AA880139F22303.
+
+
+
+# Current Documentation:
+https://docs.google.com/document/d/1m-JsLfkPYk4bAh8kTgXYM9FtWthgtedYo3L7c0qEqhs/edit#heading=h.gfbriwkbd658
