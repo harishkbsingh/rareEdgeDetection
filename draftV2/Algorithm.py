@@ -21,12 +21,6 @@ class Algorithm():
     currentHour = -1  # 0 in first iteration
     trainingTime = 30 * 24
 
-    # Cumulative values since Last Rare Edge
-    lastMaxValue = 0
-    lastMaxValuePosition = 0
-    lastTick = 0  # Test
-    lastReportedRareEdge = 0
-
     def feed(s, key, tick):
 
         # s.cumulativeValues.append(tick)
@@ -56,23 +50,6 @@ class Algorithm():
         # Time Since Last Rare Edge
         TSLMV = s.currentHour - time_series_lastMaxPosition[key]
         TSLRE = s.currentHour - time_series_lastReportedRareEdge[key]
-
-        if s.currentHour == 1000:
-            print("One Thousand")
-            print('Analyzing ', key, s.currentHour)
-        if s.currentHour == 2000:
-            print("Two Thousand")
-            print('Analyzing ', key, s.currentHour)
-        if s.currentHour == 3000:
-            print("Three Thousand")
-            print('Analyzing ', key, s.currentHour)
-        if s.currentHour == 4000:
-            print("Four Thousand")
-            print('Analyzing ', key, s.currentHour)
-        if s.currentHour == 5000:
-            print("Five Thousand")
-            print('Analyzing ', key, s.currentHour)
-
 
         if tick > time_series_expectedValue[key]:
             if (TSLRE > 24):
