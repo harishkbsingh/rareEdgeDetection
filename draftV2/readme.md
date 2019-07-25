@@ -1,4 +1,4 @@
-# New:
+# Tec Updates:
 
 #### The table "angel_test_monitored_edges" and "angel_test_monitored_edges_snowflake" contain the edges to be monitored (i.e. source, destination).
 #### The table "angel_test_edges_connection_stats" contains the stats for each of the monitored edges (i.e. source, destination, startpoint, stats, data).
