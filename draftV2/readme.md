@@ -1,4 +1,4 @@
-# Tec Updates:
+## Key Updates:
 
 #### The table "angel_test_monitored_edges" and "angel_test_monitored_edges_snowflake" contain the edges to be monitored (i.e. source, destination).
 #### The table "angel_test_edges_connection_stats" contains the stats for each of the monitored edges (i.e. source, destination, startpoint, stats, data).
@@ -7,7 +7,7 @@
 #### The parameters were the source, the destination, and the starting time and ending time. Now, the parameters are only the starting and ending time (e.g. one hour range) and all edges in the time-frame are analyzed.
 
 
-# Next Steps:
+## Next Steps:
 
 #### Create a table to save the stats, currently it is saved in memory.
 #### Add data visualization after migrating project to pycharm (it's inbuilt in jupiter). 
@@ -19,5 +19,5 @@
 
 
 
-# Current Documentation:
+## Current Documentation:
 https://docs.google.com/document/d/1m-JsLfkPYk4bAh8kTgXYM9FtWthgtedYo3L7c0qEqhs/edit#heading=h.gfbriwkbd658
