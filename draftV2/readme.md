@@ -12,6 +12,7 @@
 #### Create a table to save the stats, currently it is saved in memory.
 #### Add data visualization after migrating project to pycharm (it's inbuilt in jupiter). 
 #### Run tests in pre-prod and snowflake.
+#### Fix possible bugs
 #### Update this document.
 #### Complete documentation and TODO list bellow.
 #### Report results running algo in PREPROD_CDB_PREPROD_9593B140CA75F1259DD584236657F2A996A6FA2A14B603FF and PREPROD_CDB_SNOWFLAKE_E6FB97EF9C0EFB48D1AA880139F22303.
