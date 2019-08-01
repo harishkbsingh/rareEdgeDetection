@@ -1,4 +1,4 @@
-## TO RUN:
+## To Run:
 1. Add config file
     ```
     Config.py
