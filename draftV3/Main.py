@@ -16,7 +16,7 @@ def runMonthsSimulation():
     print('*************************** Analysis Completed')
 
 '''
-Algorithm ran for each edge (source, destination) in the current hour 
+Instanced called for each edge (source, destination) with connections in the current hour 
 Input: algorithm instance (instance) and current date (date)
 Output: None
 '''
