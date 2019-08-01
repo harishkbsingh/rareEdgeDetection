@@ -1,6 +1,6 @@
 ## TO RUN:
 1. Add config file
-    ``
+    ```
     trainingTime =  30 * 24
     oneDayAsMinTime = 24
 
@@ -8,7 +8,7 @@
     loginInfo = ['dev_angel', 'lwdev', 'DEV_TEST',
                  'PREPROD_CDB_SNOWFLAKE_E6FB97EF9C0EFB48D1AA880139F22303', 'GRAPH_INTERNAL',
                  'password']
-    ``
+    ```
 2. Run Main.py
 
 ## Next Steps (Missing):
