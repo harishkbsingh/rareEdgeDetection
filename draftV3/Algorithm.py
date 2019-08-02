@@ -1,5 +1,6 @@
-from Util import getStat, saveAlert, saveStat, getDiffInHours, printing
+from Util import getStat, saveAlert, saveStat, getDiffInHours, printing, computeStats
 from Config import trainingTime, oneDayAsMinTime
+import ast
 
 class Algorithm():
 
@@ -34,7 +35,7 @@ class Algorithm():
         toSave['lastMaxPosition'] = entry['lastMaxPosition'] # 0 # 0 during training
         toSave['lastRareEdgePosition'] = entry['lastRareEdgePosition']
         toSave['lastReportedRareEdge'] = entry['lastReportedRareEdge']
-        toSave['stdDeviation'] = entry['stdDeviation'] #TODO: Working on Online Computation here, without using python libraries
+        toSave['stdDeviationInfo'] = ast.literal_eval(entry['stdDeviationInfo'])
         toSave['currentValue'] = tick
 
         # Training Period
@@ -42,7 +43,7 @@ class Algorithm():
             toSave['lastMaxValue'] = max(entry['lastMaxValue'], tick)
             toSave['lastMaxPosition'] = trainingTime
             toSave['expectedValue'] = (s.decayFunction(1) * toSave['lastMaxValue'])
-            # toSave['stdDeviation'] = 0  # np.std(s.cumulativeValues[-200:]) --- uncommented
+            toSave['stdDeviationInfo'] = {'count': 0, 'mean': 0, 'sum': 0, 'variance': 0, 'stdDev': 0}
             saveStat(toSave)
             return
 
