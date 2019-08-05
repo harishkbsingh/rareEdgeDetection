@@ -1,6 +1,5 @@
-from Util import getStat, saveAlert, saveStat, getDiffInHours, printing, processNextStdDev, getStdDevObject, getSourceAndDestinationFromKey
+from Util import getStat, saveAlert, saveStat, getDiffInHours, processNextStdDev, getNewStdDevObject, getSourceAndDestinationFromKey
 from Config import trainingTime, oneDayAsMinTime
-import ast
 
 class Algorithm():
 
@@ -19,51 +18,49 @@ class Algorithm():
     def feed(s, key, tick, currentDate):
 
         # Load last edge entry
-        entry = getStat(key)
+        lastEntry = getStat(key)
 
-        # New entry to be saved
-        toSave = dict()
-        toSave['firstTimeSeen'] = currentDate if entry['firstTimeSeen'] is 0 else entry['firstTimeSeen']
-        toSave['currentHour'] = 0 if entry['firstTimeSeen'] is 0 else getDiffInHours(currentDate, entry['firstTimeSeen'])
-        toSave['theKey'] = key
-        toSave['theSource'], toSave['theDestination'] = getSourceAndDestinationFromKey(key)
-        toSave['lastTimeSeen'] = currentDate
-        toSave['expectedValue'] = entry['expectedValue'] # 0 during training
-        toSave['lastMaxValue'] = entry['lastMaxValue']  # 0 during training
-        toSave['lastMaxPosition'] = entry['lastMaxPosition'] # 0 # 0 during training
-        toSave['lastRareEdgePosition'] = entry['lastRareEdgePosition']
-        toSave['lastReportedRareEdge'] = entry['lastReportedRareEdge']
-        toSave['currentValue'] = tick
-        toSave['stdDeviationInfo'], stdDev = processNextStdDev(entry['stdDeviationInfo'], tick)
-        currentHour = toSave['currentHour']
+        # Default New Entry
+        newEntry = dict()
+        newEntry['firstTimeSeen'] = currentDate if lastEntry['firstTimeSeen'] is 0 else lastEntry['firstTimeSeen']
+        newEntry['currentHour'] = 0 if lastEntry['firstTimeSeen'] is 0 else getDiffInHours(currentDate, lastEntry['firstTimeSeen'])
+        newEntry['theKey'] = key
+        newEntry['theSource'], newEntry['theDestination'] = getSourceAndDestinationFromKey(key)
+        newEntry['lastTimeSeen'] = currentDate
+        newEntry['expectedValue'] = lastEntry['expectedValue']
+        newEntry['lastMaxValue'] = lastEntry['lastMaxValue']
+        newEntry['lastMaxPosition'] = lastEntry['lastMaxPosition']
+        newEntry['lastRareEdgePosition'] = lastEntry['lastRareEdgePosition']
+        newEntry['lastReportedRareEdge'] = lastEntry['lastReportedRareEdge']
+        newEntry['currentValue'] = tick
+        newEntry['stdDeviationInfo'], stdDev = processNextStdDev(lastEntry['stdDeviationInfo'], tick)
+        currentHour = newEntry['currentHour']
 
         # Training Period
         if currentHour < trainingTime:
-            toSave['lastMaxValue'] = max(entry['lastMaxValue'], tick)
-            toSave['lastMaxPosition'] = trainingTime
-            toSave['expectedValue'] = (s.decayFunction(1) * toSave['lastMaxValue'])
-            saveStat(toSave)
+            newEntry['lastMaxValue'] = max(lastEntry['lastMaxValue'], tick)
+            newEntry['lastMaxPosition'] = trainingTime
+            newEntry['expectedValue'] = (s.decayFunction(1) * newEntry['lastMaxValue'])
+            saveStat(newEntry)
             return
 
         # Time since last Rare Edge & Max Value
-        TSLMV = currentHour - entry['lastMaxPosition']
-        TSLRE = currentHour - entry['lastRareEdgePosition']
-
-        printing(currentDate, key) #### Printing
+        TSLMV = currentHour - lastEntry['lastMaxPosition']
+        TSLRE = currentHour - lastEntry['lastRareEdgePosition']
 
         # If rare, store alert
-        if tick > entry['expectedValue']:
+        if tick > lastEntry['expectedValue']:
             if TSLRE > oneDayAsMinTime:
                 saveAlert(key, tick, currentHour, currentDate)
-                toSave['lastRareEdgePosition'] = currentHour
-                toSave['stdDeviationInfo'], stdDev = getStdDevObject(), 0
+                newEntry['lastRareEdgePosition'] = currentHour
+                newEntry['stdDeviationInfo'], stdDev = getNewStdDevObject(), 0
 
-        # Det expected valued
-        if (s.decayFunction(TSLMV) * entry['lastMaxValue']) < s.decayFunction(1) * tick:
-            toSave['expectedValue'] = (s.decayFunction(1) * tick) + stdDev
-            toSave['lastMaxPosition'] = currentHour
-            toSave['lastMaxValue'] = tick
+        # Det Next expected valued
+        if (s.decayFunction(TSLMV) * lastEntry['lastMaxValue']) < s.decayFunction(1) * tick:
+            newEntry['expectedValue'] = (s.decayFunction(1) * tick) + stdDev
+            newEntry['lastMaxPosition'] = currentHour
+            newEntry['lastMaxValue'] = tick
         else:
-            toSave['expectedValue'] = (s.decayFunction(TSLMV) * entry['lastMaxValue']) + stdDev
+            newEntry['expectedValue'] = (s.decayFunction(TSLMV) * lastEntry['lastMaxValue']) + stdDev
 
-        saveStat(toSave)
+        saveStat(newEntry)

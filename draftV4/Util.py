@@ -59,9 +59,10 @@ def getStat(key):
 
     # query = "SELECT theKey, theSource, theDestination, lastMaxPosition, lastTimeSeen, firstTimeSeen, lastReportedRareEdge, lastRareEdgePosition, currentValue, currentHour, expectedValue, lastMaxValue, parse_json(stdDeviationInfo) as STDDEVIATIONINFO"
     query = "SELECT * FROM angel_test_edges_connection_stats_snowflake WHERE theKey = '" + key + "' ORDER BY LASTTIMESEEN DESC LIMIT 1"
+    query = "SELECT * FROM angel_test_edges_connection_stats_snowflake WHERE theKey = '" + key + "' LIMIT 1"
     result = dataImporter(query, loginInfo)
 
-    dictionary = getEntryObject(key)
+    dictionary = getNewEntryObject(key)
     for index, row in result.iterrows():
         dictionary['theKey'] = row['THEKEY']
         dictionary['theSource'] = row['THESOURCE']
@@ -87,43 +88,31 @@ Output: Existing edges with # of connections during given time frame in the form
 '''
 def getEdges(fromDate, toDate):
 
-    # but = 'wget%'
-    # " AND sourceApplication NOT LIKE '%s'" \
-    # " AND sourceApplication = 'nginxworker'" \
-    # " AND destinationDNS = 'snowflakecomputingcom080TCP'"
-
     query = "SELECT ZEROIFNULL(sum(edge_t.props:num_conns)) num_conns," \
-            " CONCAT(split_part(ns.props:exe_path, '/', -1),'',ns.props:cmdline_terms[0]) as sourceApplication," \
-            " CONCAT(split_part(nd.key:hostname, '.', -2), split_part(nd.key:hostname, '.', -1), nd.key:ip_internal, nd.key:port, nd.key:protocol) as destinationDNS" \
-            " FROM GRAPH_INTERNAL.edge_t, GRAPH_INTERNAL.node_t ns, GRAPH_INTERNAL.node_t nd" \
-            " WHERE edge_t.SRC_KEY = ns.KEY" \
-            " AND edge_t.DST_KEY = nd.KEY AND edge_t.start_time = ns.start_time  AND edge_t.start_time = nd.start_time" \
-            " AND edge_t.start_time >= to_timestamp('%s') AND edge_t.start_time < to_timestamp('%s')" \
-            " AND ns.start_time >= to_timestamp('%s') AND ns.start_time < to_timestamp('%s')" \
-            " AND nd.start_time >= to_timestamp('%s') AND nd.start_time < to_timestamp('%s')" \
-            " AND edge_t.SRC_TYPE = 'Process'" \
-            " AND edge_t.DST_TYPE = 'DnsSep'" \
-            " AND sourceApplication != 'NULL'" \
-            " AND destinationDNS != 'NULL'" \
-            " AND sourceApplication = 'nginxworker'" \
-            " AND destinationDNS = 'snowflakecomputingcom080TCP'" \
-            " GROUP BY sourceApplication, destinationDNS;" % (
-            fromDate, toDate, fromDate, toDate, fromDate, toDate)
+    " CONCAT(split_part(ns.props:exe_path, '/', -1),'',ns.props:cmdline_terms[0]) as sourceApplication," \
+    " CONCAT(split_part(nd.key:hostname, '.', -2), split_part(nd.key:hostname, '.', -1), nd.key:ip_internal, nd.key:port, nd.key:protocol) as destinationDNS" \
+    " FROM GRAPH_INTERNAL.edge_t, GRAPH_INTERNAL.node_t ns, GRAPH_INTERNAL.node_t nd" \
+    " WHERE edge_t.SRC_KEY = ns.KEY" \
+    " AND edge_t.DST_KEY = nd.KEY AND edge_t.start_time = ns.start_time  AND edge_t.start_time = nd.start_time" \
+    " AND edge_t.start_time >= to_timestamp('%s') AND edge_t.start_time < to_timestamp('%s')" \
+    " AND ns.start_time >= to_timestamp('%s') AND ns.start_time < to_timestamp('%s')" \
+    " AND nd.start_time >= to_timestamp('%s') AND nd.start_time < to_timestamp('%s')" \
+    " AND edge_t.SRC_TYPE = 'Process'" \
+    " AND edge_t.DST_TYPE = 'DnsSep'" \
+    " AND sourceApplication = 'nginxworker'" \
+    " AND destinationDNS = 'snowflakecomputingcom080TCP'" \
+    " GROUP BY sourceApplication, destinationDNS;" % (
+    fromDate, toDate, fromDate, toDate, fromDate, toDate)
 
 
-    # Given a ds "result", we create a custom dictionary w/ format [key] = [source, destination, #connection]
+    # Create a custom dictionary w/ format [key] = [source, destination, #connection] from the result
     result = dataImporter(query, loginInfo)
     dictionary = defaultdict(int)
     for index, row in result.iterrows():
-        dictionary[row['SOURCEAPPLICATION'] + '---' + row['DESTINATIONDNS']] = [row['SOURCEAPPLICATION'], row['DESTINATIONDNS'], int(row['NUM_CONNS'])]
+        source, destination, num_con = row['SOURCEAPPLICATION'], row['DESTINATIONDNS'], int(row['NUM_CONNS'])
+        dictionary[getKeyFromSourceAndDestination(source, destination)] = [source, destination, num_con]
     return dictionary
 
-'''
-Input: source & destination
-Output: key created by concatenating source & dest
-'''
-def getKey(source, destination):
-    return source + '---' + destination
 
 
 '''
@@ -147,7 +136,7 @@ def processNextStdDev(entry, tick):
 These methods return predefined objects
 '''
 
-def getStdDevObject():
+def getNewStdDevObject():
     object = dict()
     object['count'] = 1.0
     object['mean'] = 0.0
@@ -156,7 +145,7 @@ def getStdDevObject():
     object['stdDev'] = 0.0
     return object
 
-def getEntryObject(key):
+def getNewEntryObject(key):
     object = {}
     object['theKey'] = key
     object['theSource'], object['theDestination'] = getSourceAndDestinationFromKey(key)
@@ -169,7 +158,7 @@ def getEntryObject(key):
     object['currentHour'] = 0
     object['expectedValue'] = 0
     object['lastMaxValue'] = 0
-    object['stdDeviationInfo'] = str(getStdDevObject())  # str parse needed for entry = ast.literal_eval(entry)
+    object['stdDeviationInfo'] = str(getNewStdDevObject())  # str parse needed for entry = ast.literal_eval(entry)
     return object
 
 '''
@@ -181,7 +170,7 @@ def getSourceAndDestinationFromKey(theKey):
 
 '''
 Input:  Source, Destination
-Output: Key as {source}---{destination}
+Output: Key as the concatenation of {source}---{destination}
 '''
 def getKeyFromSourceAndDestination(source, destination):
     return source + '---' + destination
@@ -191,7 +180,7 @@ def getKeyFromSourceAndDestination(source, destination):
 Input: Current Hour, Key
 Output: Printing when mark is reached just for debugging purpose
 '''
-def printing(currentHour, key):
+def printForDebug(currentHour, key):
     if currentHour == 1000:
         print("One Thousand")
         print('Analyzing ', key, currentHour)

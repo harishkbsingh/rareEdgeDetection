@@ -1,20 +1,23 @@
 import datetime
 from Algorithm import Algorithm
-from Util import getEdges, getKey
+from Util import getEdges, getKeyFromSourceAndDestination
 import time
 
 '''
-This method simulates the algorithm for 6 months
+This method simulates running the algorithm every one hour for long period by generating
+all dates (in this case) for 6 months starting on 1/1/2019.
 '''
 def runMonthsSimulation():
 
     instance = Algorithm()
     base = datetime.datetime(2019, 1, 1)
-    date_list = [base + datetime.timedelta(hours=x) for x in range((24*30*5) + 13)]
+    six_months = (24*30*5) + 13
+    date_list = [base + datetime.timedelta(hours=x) for x in range(six_months)]
     for t in date_list:
         runAlgorithm(instance, t)
 
     print('*************************** Analysis Completed')
+
 
 '''
 Instance called for each edge (source, destination) with connections in the current hour 
@@ -30,8 +33,12 @@ def runAlgorithm(instance, date):
 
     # Feed algorithm for each edge
     for key, row in dictionary.items():
-        instance.feed(getKey(row[0], row[1]), row[2], start)
+        instance.feed(getKeyFromSourceAndDestination(row[0], row[1]), row[2], start)
 
-start_time = time.time()
-runMonthsSimulation()
-print("--- %s seconds ---" % (time.time() - start_time))
+'''
+Starting method ** main ** 
+'''
+if __name__== "__main__":
+    start_time = time.time()
+    runMonthsSimulation()
+    print("--- %s seconds ---" % (time.time() - start_time))
