@@ -1,7 +1,5 @@
 ## Project Structure
 
-> Documentation
-
 ### Top-level directory layout
 
     .
@@ -33,7 +31,8 @@
 
 ## In Progress
 
-- Optimization: Running a test on the edge "nginxworker" (source application) to "snowflakecomputingcom080TCP" (dns destination) for 6 months took 27935.60666704178 seconds, which is 7.75 hours. 
+
+> Optimization: Running a test on the edge "nginxworker" (source application) to "snowflakecomputingcom080TCP" (dns destination) for 6 months took 27935.60666704178 seconds, which is 7.75 hours. 
 
 
 
