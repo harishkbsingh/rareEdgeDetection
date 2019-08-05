@@ -6,11 +6,11 @@ A time series is an ordered sequence of values at equally spaced time intervals.
 
 In this work, our goal is to create an algorithm to help us detect “rare edges” between two (entity) instances  by analyzing the behavior on the number of connection between the entities in context.
 
-> The overall algorithm can be summarized as follows:
+The overall algorithm can be summarized as follows:
 
-1. Take as input initial time. 
+> 1. Take as input initial time. 
 
-2. For the given time frame, we analyze each of the existent edges.   
+> 2. For the given time frame, we analyze each of the existent edges.   
    2.1 Persist the metrics used determined during the analysis on the table “angel_test_edges_connection_stats”, these are used for online learning.
 
 
