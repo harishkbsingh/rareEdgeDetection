@@ -21,6 +21,7 @@ To analyze each of the existent edges, we use the following approach:
 > 2. After the training period, we continue updating each of the edge’s stats. Our two key heuristics are: (a) There cannot be two rare edges within 24 hours; (b) The expected number of connection of each of the edges decreases throughout the time. For this, we used a custom linear regression function created using least squares fitting.
 
 <br/>
+
 ### Implementation Top-level directory layout
 
     .
@@ -32,6 +33,7 @@ To analyze each of the existent edges, we use the following approach:
     
     
 <br/>
+
 ### To Run
 
 1. Add config file
@@ -51,11 +53,13 @@ To analyze each of the existent edges, we use the following approach:
 
 
 <br/>
+
 ### In Progress
 
 > Optimization: Running a test on the edge "nginxworker" (source application) to "snowflakecomputingcom080TCP" (dns destination) for 6 months took 27935.60666704178 seconds, which is 7.75 hours. 
 
 <br/>
+
 ### Next Steps (Missing)
 
 1. Test with all edges for Snowflake and PreProd
