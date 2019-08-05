@@ -58,11 +58,22 @@ To analyze each of the existent edges, we use the following approach:
     │   ├── runMonthsSimulation # Run algorithm for long time frame (6 months in this case).
     │   └── runAlgorithm        # For each edge in the time frame, the algorithm is executed
     ├── QueryRunner
-    │   └── execute             # Receives credentials and query to be executed in Snowflake
+    │   └── execute             # Receives credentials and query to be executed in Snowflake.
     ├── Algorithm               
     │   ├── decayFunction       # Use least squares fittings to compute expected value decrease.
     │   └── feed                # Process edge in context in current time frame (hour).
-    └── ...
+    └── Util
+        ├── getDiffInHours      # difference in hours between input dates.
+        ├── saveEntry           # Save last entry of the edge in context.
+        ├── saveAlert           # Store Rare edge info.
+        ├── getLastEntry        # Get last entry of the edge in context.
+        ├── getEdges            # Return existing edges with # of connections during given time frame in the format.
+        ├── processNextStdDev       # Compute Std Dev (stdDev) & Values stored for next computation (object).
+        ├── getNewStdDevObject       # Default stdDeviationInfo object.
+        ├── getNewEntryObject       # Default Entry object
+        ├── getSourceAndDestinationFromKey       # Return Source, Destination from given Key.
+        ├── getKeyFromSourceAndDestination       # Return Key as the concatenation of {source}---{destination}.
+        └── printForDebug                # Print when mark is reached just for debugging purpose.
     
 <br/>
 
