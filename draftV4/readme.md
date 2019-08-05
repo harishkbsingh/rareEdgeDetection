@@ -1,3 +1,18 @@
+## Project Structure
+
+> Documentation
+
+### Top-level directory layout
+
+    .
+    ├── Main                    # Start point: runs the algorithm for a range of dates
+    ├── QueryRunner             # Query executor helper class
+    ├── Algorithm               # Core algorithm
+    ├── Util                    # Tools and utilities
+    └── README.md
+    
+    
+
 ## To Run:
 1. Add config file
     ```
