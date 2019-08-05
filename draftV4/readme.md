@@ -20,19 +20,7 @@ To analyze each of the existent edges, we use the following approach:
 
 > 2. After the training period, we continue updating each of the edge’s stats. Our two key heuristics are: (a) There cannot be two rare edges within 24 hours; (b) The expected number of connection of each of the edges decreases throughout the time. For this, we used a custom linear regression function created using least squares fitting.
 
-<br/>
 
-### Implementation Top-level directory layout
-
-    .
-    ├── Main                    # Start point: runs the algorithm for a range of dates
-    ├── QueryRunner             # Query executor helper class
-    ├── Algorithm               # Core algorithm
-    ├── Util                    # Tools and utilities
-    └── README.md
-    
-    
-<br/>
 
 ### To Run
 
@@ -51,7 +39,18 @@ To analyze each of the existent edges, we use the following approach:
         ```
 2. Run Main.py
 
+<br/>
 
+### Top-level directory layout
+
+    .
+    ├── Main                    # Start point: runs the algorithm for a range of dates
+    ├── QueryRunner             # Query executor helper class
+    ├── Algorithm               # Core algorithm
+    ├── Util                    # Tools and utilities
+    └── README.md
+    
+    
 <br/>
 
 ### In Progress
