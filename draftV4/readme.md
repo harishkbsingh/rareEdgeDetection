@@ -63,6 +63,6 @@ In this work, our goal is to create an algorithm to help us detect “rare edges
 
 1. Test with all edges for Snowflake and PreProd
 
-2. Update documentation
+2. Update THIS documentation
 
 3. Java implementation?
