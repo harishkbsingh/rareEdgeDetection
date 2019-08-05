@@ -1,3 +1,5 @@
+## Rare Edge Detection
+
 ### Description
 
 A time series is an ordered sequence of values at equally spaced time intervals. There are several popular algorithms to detect rareness in time series, however, due to the number of considerations and nuances involved in our domain, we opted to develop tailored algorithm.
@@ -20,7 +22,7 @@ In this work, our goal is to create an algorithm to help us detect “rare edges
 
 
 
-### Top-level directory layout:
+### Implementation Top-level directory layout:
 
     .
     ├── Main                    # Start point: runs the algorithm for a range of dates
