@@ -24,7 +24,7 @@ To analyze each of the existent edges, we use the following approach:
 
 ### How to Run ?
 
-1. Add config file
+1. Create config.py file
     ```
     Config.py
 
@@ -32,7 +32,7 @@ To analyze each of the existent edges, we use the following approach:
         trainingTime =  30 * 24
         oneDayAsMinTime = 24
 
-        # Example for Snowflake
+        # Credentials example for Snowflake
         loginInfo = ['dev_angel', 'lwdev', 'DEV_TEST',
                      'PREPROD_CDB_SNOWFLAKE_E6FB97EF9C0EFB48D1AA880139F22303', 'GRAPH_INTERNAL',
                      'password']
