@@ -1,4 +1,4 @@
-from Util import getStat, saveAlert, saveStat, getDiffInHours, processNextStdDev, getNewStdDevObject, getSourceAndDestinationFromKey
+from Util import getLastEntry, saveAlert, saveEntry, getDiffInHours, processNextStdDev, getNewStdDevObject, getSourceAndDestinationFromKey
 from Config import trainingTime, oneDayAsMinTime
 
 class Algorithm():
@@ -18,7 +18,7 @@ class Algorithm():
     def feed(s, key, tick, currentDate):
 
         # Load last edge entry
-        lastEntry = getStat(key)
+        lastEntry = getLastEntry(key)
 
         # Default New Entry
         newEntry = dict()
@@ -41,7 +41,7 @@ class Algorithm():
             newEntry['lastMaxValue'] = max(lastEntry['lastMaxValue'], tick)
             newEntry['lastMaxPosition'] = trainingTime
             newEntry['expectedValue'] = (s.decayFunction(1) * newEntry['lastMaxValue'])
-            saveStat(newEntry)
+            saveEntry(newEntry)
             return
 
         # Time since last Rare Edge & Max Value
@@ -63,4 +63,4 @@ class Algorithm():
         else:
             newEntry['expectedValue'] = (s.decayFunction(TSLMV) * lastEntry['lastMaxValue']) + stdDev
 
-        saveStat(newEntry)
+        saveEntry(newEntry)

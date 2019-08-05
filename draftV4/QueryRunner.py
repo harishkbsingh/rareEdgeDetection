@@ -6,7 +6,7 @@ import snowflake.connector
 Input: Query as the query to be executed & loginInfo as the credentials and DB info
 Output: Results
 '''
-def dataImporter(query, loginInfo):
+def execute(query, loginInfo):
 
     # Check all parameters are given and initialize (dictionary)
     loginParams = ['user', 'account', 'warehouse', 'database', 'schema', 'password']

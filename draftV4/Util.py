@@ -1,6 +1,6 @@
 import math
 from collections import defaultdict
-from DataImporter import dataImporter
+from QueryRunner import execute
 from Config import loginInfo
 import datetime
 import json
@@ -19,10 +19,10 @@ def getDiffInHours(date1, date2):
     return int(hours)
 
 '''
-Input: Info related to edge in context
+Input: Save last entry of the edge in context
 Output: None
 '''
-def saveStat(dictionary):
+def saveEntry(dictionary):
     theKey = dictionary['theKey']
     theSource = dictionary['theSource']
     theDestination = dictionary['theDestination']
@@ -37,30 +37,30 @@ def saveStat(dictionary):
     lastMaxValue = dictionary['lastMaxValue']
     stdDeviationInfo = json.dumps(dictionary['stdDeviationInfo'])
     query = "INSERT INTO angel_test_edges_connection_stats_snowflake VALUES ('" + str(theKey) + "','" + str(theSource) + "','" + str(theDestination) + "'," + str(lastMaxPosition) + ",'" + str(lastTimeSeen) + "','" + str(firstTimeSeen) + "'," + str(lastReportedRareEdge) + "," + str(lastRareEdgePosition) + "," + str(currentValue) + "," + str(currentHour) + "," + str(expectedValue) + "," + str(lastMaxValue) + ",'" + str(stdDeviationInfo) + "')"
-    dataImporter(query, loginInfo)
+    execute(query, loginInfo)
     return
 
 '''
-Input: Rare edge info
+Input: Store Rare edge info
 Output: None
 '''
 
 def saveAlert(theKey, theValue, thePosition, theDate):
     theSource, theDestination = getSourceAndDestinationFromKey(theKey)
     query = "INSERT into ANGEL_TEST_EDGES_ALERT_SNOWFLAKE values ('" + str(theKey) + "','" + str(theSource) + "','" + str(theDestination) + "'," +str(theValue) + "," + str(thePosition) + ",'"+theDate+"')"
-    dataImporter(query, loginInfo)
+    execute(query, loginInfo)
     return
 
 '''
 Input: key consisting of "source" + "destination".
-Output: Latest info related to edge in context
+Output: Get last entry of the edge in context
 '''
-def getStat(key):
+def getLastEntry(key):
 
     # query = "SELECT theKey, theSource, theDestination, lastMaxPosition, lastTimeSeen, firstTimeSeen, lastReportedRareEdge, lastRareEdgePosition, currentValue, currentHour, expectedValue, lastMaxValue, parse_json(stdDeviationInfo) as STDDEVIATIONINFO"
     query = "SELECT * FROM angel_test_edges_connection_stats_snowflake WHERE theKey = '" + key + "' ORDER BY LASTTIMESEEN DESC LIMIT 1"
     query = "SELECT * FROM angel_test_edges_connection_stats_snowflake WHERE theKey = '" + key + "' LIMIT 1"
-    result = dataImporter(query, loginInfo)
+    result = execute(query, loginInfo)
 
     dictionary = getNewEntryObject(key)
     for index, row in result.iterrows():
@@ -106,7 +106,7 @@ def getEdges(fromDate, toDate):
 
 
     # Create a custom dictionary w/ format [key] = [source, destination, #connection] from the result
-    result = dataImporter(query, loginInfo)
+    result = execute(query, loginInfo)
     dictionary = defaultdict(int)
     for index, row in result.iterrows():
         source, destination, num_con = row['SOURCEAPPLICATION'], row['DESTINATIONDNS'], int(row['NUM_CONNS'])
@@ -118,7 +118,7 @@ def getEdges(fromDate, toDate):
 '''
 
 Input: Params needed for variance computation
-Output: Std Dev (stdDev) & Values stored for next computation (object)
+Output: Computed Std Dev (stdDev) & Values stored for next computation (object)
 Source: Adapted from https://blog.rapid7.com/2016/10/19/overview-of-online-algorithm-using-standard-deviation-example/
 '''
 def processNextStdDev(entry, tick):
@@ -133,9 +133,8 @@ def processNextStdDev(entry, tick):
     return object, stdDev
 
 '''
-These methods return predefined objects
+Default stdDeviationInfo object
 '''
-
 def getNewStdDevObject():
     object = dict()
     object['count'] = 1.0
@@ -145,6 +144,9 @@ def getNewStdDevObject():
     object['stdDev'] = 0.0
     return object
 
+'''
+Default Entry object
+'''
 def getNewEntryObject(key):
     object = {}
     object['theKey'] = key
@@ -178,7 +180,7 @@ def getKeyFromSourceAndDestination(source, destination):
 
 '''
 Input: Current Hour, Key
-Output: Printing when mark is reached just for debugging purpose
+Output: Print when mark is reached just for debugging purpose
 '''
 def printForDebug(currentHour, key):
     if currentHour == 1000:
