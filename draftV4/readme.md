@@ -14,15 +14,16 @@
         ```
 2. Run Main.py
 
-##
+
+
+## TODO Optimization:
+- Running a test on the edge "nginxworker" (source application) to "snowflakecomputingcom080TCP" (dns destination) for 6 months took 27935.60666704178 seconds, which is 7.75 hours. 
+
+
 ## Next Steps (Missing):
 
-1. ~Fix online std dev without python library~
+1. Test with all edges for Snowflake and PreProd
 
-2.1 ~Test with edge "nginxworker" (source application) & "snowflakecomputingcom080TCP" (dns destination)~
+2. Update documentation
 
-2.2 Test with all edges for Snowflake and PreProd
-
-3. Update documentation
-
-4. Java implementation?
+3. Java implementation?
