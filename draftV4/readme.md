@@ -14,11 +14,11 @@ The overall algorithm can be summarized as follows:
    2.1 Persist the metrics used determined during the analysis on the table “angel_test_edges_connection_stats”, these are used for online learning.
 
 
-> To analyze each of the existent edges, we use the following approach:
+To analyze each of the existent edges, we use the following approach:
 
-1. During the training period (first 30 days), we obtain the entry with the most number of connections. This value and the cumulative std serve to compute the next expected number of connection for each of the edges.
+> 1. During the training period (first 30 days), we obtain the entry with the most number of connections. This value and the cumulative std serve to compute the next expected number of connection for each of the edges.
 
-2. After the training period, we continue updating each of the edge’s stats. Our two key heuristics are: (a) There cannot be two rare edges within 24 hours; (b) The expected number of connection of each of the edges decreases throughout the time. For this, we used a custom linear regression function created using least squares fitting.
+> 2. After the training period, we continue updating each of the edge’s stats. Our two key heuristics are: (a) There cannot be two rare edges within 24 hours; (b) The expected number of connection of each of the edges decreases throughout the time. For this, we used a custom linear regression function created using least squares fitting.
 
 
 
