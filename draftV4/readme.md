@@ -48,8 +48,21 @@ To analyze each of the existent edges, we use the following approach:
     ├── QueryRunner             # Query executor helper class
     ├── Algorithm               # Core algorithm
     ├── Util                    # Tools and utilities
+    ├── Config                  # General config
     └── README.md
     
+    
+### Methods Short Description:
+    .
+    ├── Main
+    │   ├── runMonthsSimulation # Run algorithm for long time frame (6 months in this case).
+    │   └── runAlgorithm        # For each edge in the time frame, the algorithm is executed
+    ├── QueryRunner
+    │   └── execute             # Receives credentials and query to be executed in Snowflake
+    ├── Algorithm               
+    │   ├── decayFunction       # Use least squares fittings to compute expected value decrease.
+    │   └── feed                # Process edge in context in current time frame (hour).
+    └── ...
     
 <br/>
 
