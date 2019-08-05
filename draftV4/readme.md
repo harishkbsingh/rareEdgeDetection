@@ -22,7 +22,7 @@ To analyze each of the existent edges, we use the following approach:
 
 
 
-### Implementation Top-level directory layout:
+### Implementation Top-level directory layout
 
     .
     ├── Main                    # Start point: runs the algorithm for a range of dates
@@ -33,7 +33,7 @@ To analyze each of the existent edges, we use the following approach:
     
     
 
-### To Run:
+### To Run
 
 1. Add config file
     ```
@@ -52,14 +52,14 @@ To analyze each of the existent edges, we use the following approach:
 
 
 
-### In Progress:
+### In Progress
 
 
 > Optimization: Running a test on the edge "nginxworker" (source application) to "snowflakecomputingcom080TCP" (dns destination) for 6 months took 27935.60666704178 seconds, which is 7.75 hours. 
 
 
 
-### Next Steps (Missing):
+### Next Steps (Missing)
 
 1. Test with all edges for Snowflake and PreProd
 
