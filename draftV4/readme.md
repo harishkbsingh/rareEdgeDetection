@@ -19,7 +19,7 @@
 
 1. ~Fix online std dev without python library~
 
-2.1 ~Test with edge source application "nginxworker" & destination dns "snowflakecomputingcom080TCP"~
+2.1 ~Test with edge "nginxworker" (source application) & "snowflakecomputingcom080TCP" (dns destination)~
 
 2.2 Test with all edges for Snowflake and PreProd
 
